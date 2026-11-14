@@ -1,0 +1,80 @@
+/* Commission report — A4 landscape. Everything is scoped under .cp-root and
+   the page box is a named page, so none of this reaches the rest of the app
+   or the main printed report. */
+
+@page commission {
+  size: A4 landscape;
+  margin: 12mm 12mm 14mm;
+}
+
+.cp-root {
+  --cp-ink: #17211b;
+  --cp-mute: #66756c;
+  --cp-line: #dfe5e1;
+  --cp-fill: #f3f6f4;
+  --cp-deep: #1f3d2f;
+  --cp-warn: #b45309;
+  min-height: 100vh;
+  background: #e9ece9;
+  color: var(--cp-ink);
+  font-family: "Instrument Sans", system-ui, sans-serif;
+  font-size: 9pt;
+  line-height: 1.35;
+  padding: 24px 0 48px;
+}
+.cp-center { display: grid; place-items: center; font-size: 12pt; color: var(--cp-mute); }
+.cp-bad { color: #be123c; }
+
+.cp-toolbar { position: sticky; top: 0; z-index: 2; display: flex; gap: 8px; justify-content: center; padding-bottom: 16px; }
+.cp-btn {
+  padding: 8px 14px; border-radius: 10px; border: 1px solid var(--cp-line); background: #fff;
+  font: 600 13px "Instrument Sans", system-ui, sans-serif; color: var(--cp-ink); cursor: pointer;
+}
+.cp-btn.primary { background: var(--cp-deep); border-color: var(--cp-deep); color: #fff; }
+
+.cp-sheet {
+  page: commission;
+  width: 297mm;
+  min-height: 210mm;
+  margin: 0 auto;
+  padding: 12mm;
+  box-sizing: border-box;
+  background: #fff;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.12);
+}
+
+.cp-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 5mm; border-bottom: 2px solid var(--cp-deep); }
+.cp-logo { height: 14mm; width: auto; }
+.cp-title { text-align: right; }
+.cp-title h1 { margin: 0; font-size: 18pt; font-weight: 800; letter-spacing: -0.01em; color: var(--cp-deep); }
+.cp-month { font-size: 12pt; font-weight: 700; }
+.cp-muted { color: var(--cp-mute); font-weight: 400; }
+.cp-warn { color: var(--cp-warn); }
+
+.cp-rule { margin: 5mm 0 2mm; padding: 3mm 4mm; background: var(--cp-fill); border-left: 3px solid var(--cp-deep); border-radius: 2px; }
+.cp-note { margin: 0 0 2mm; color: var(--cp-mute); font-style: italic; }
+.cp-empty { padding: 2mm 0; }
+.cp-foot { margin-top: 1.5mm; font-size: 7.5pt; color: var(--cp-mute); }
+
+.cp-root h2 { font-size: 11pt; font-weight: 800; margin: 6mm 0 2mm; color: var(--cp-deep); break-after: avoid; }
+.cp-agent { break-inside: auto; }
+
+.cp-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.cp-table th, .cp-table td { padding: 1.6mm 2mm; text-align: left; border-bottom: 1px solid var(--cp-line); vertical-align: top; }
+.cp-table th { font-size: 7.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: var(--cp-mute); background: var(--cp-fill); }
+.cp-table thead { display: table-header-group; }
+.cp-table tr { break-inside: avoid; }
+.cp-table tfoot td { font-weight: 800; background: var(--cp-fill); border-top: 1.5px solid var(--cp-deep); border-bottom: 0; }
+.cp-table .r { text-align: right; white-space: nowrap; }
+.cp-table .b { font-weight: 700; }
+
+.cp-sign { display: grid; grid-template-columns: 1fr 1fr; gap: 30mm; margin-top: 14mm; break-inside: avoid; }
+.cp-sign div { border-top: 1px solid var(--cp-ink); padding-top: 1.5mm; height: 14mm; }
+.cp-sign span { font-size: 8pt; color: var(--cp-mute); }
+
+@media print {
+  .cp-root { background: #fff; padding: 0; min-height: 0; }
+  .cp-toolbar { display: none; }
+  .cp-sheet { width: auto; min-height: 0; padding: 0; margin: 0; box-shadow: none; }
+  .cp-root * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

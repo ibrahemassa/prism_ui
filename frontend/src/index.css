@@ -1,0 +1,119 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #f6f7f9;
+  --panel: #ffffff;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --line: #e7e9ee;
+  --brand: #4f46e5;
+  --brand-ink: #4338ca;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+body {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- small design-system helpers on top of Tailwind ---- */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+  line-height: 1.4;
+}
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+.scrolly::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+.scrolly::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 8px;
+}
+tr.rowhover:hover {
+  background: #f8fafc;
+}
+.topbar {
+  background: color-mix(in srgb, var(--bg) 80%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+
+/* ---------------- dark mode ----------------
+   Surfaces are token-driven; the hardcoded Tailwind slate utilities used in
+   tables/cards are retargeted here so dark mode works without dark: on every
+   element. */
+:root[data-theme="dark"] {
+  --bg: #0b0f19;
+  --panel: #131a29;
+  --ink: #e5e7eb;
+  --muted: #94a3b8;
+  --line: #232c3d;
+}
+:root[data-theme="dark"] body {
+  background: var(--bg);
+  color: var(--ink);
+}
+:root[data-theme="dark"] .bg-white {
+  background: var(--panel) !important;
+}
+:root[data-theme="dark"] .text-slate-700,
+:root[data-theme="dark"] .text-slate-600,
+:root[data-theme="dark"] .text-slate-500 {
+  color: var(--muted) !important;
+}
+:root[data-theme="dark"] .text-slate-400 {
+  color: #6b7688 !important;
+}
+:root[data-theme="dark"] .border-slate-50,
+:root[data-theme="dark"] .border-slate-100,
+:root[data-theme="dark"] .border-slate-200,
+:root[data-theme="dark"] .border-rose-200 {
+  border-color: var(--line) !important;
+}
+:root[data-theme="dark"] .bg-slate-100 {
+  background: #232c3d !important;
+}
+:root[data-theme="dark"] .bg-slate-50,
+:root[data-theme="dark"] .hover\:bg-slate-50:hover {
+  background: #0f1523 !important;
+}
+:root[data-theme="dark"] tr.rowhover:hover {
+  background: #0f1523;
+}
+:root[data-theme="dark"] .bg-indigo-100 {
+  background: #26314d !important;
+}
+:root[data-theme="dark"] .text-indigo-700 {
+  color: #a5b4fc !important;
+}
+:root[data-theme="dark"] .bg-rose-50 {
+  background: #2a1720 !important;
+}
+:root[data-theme="dark"] .scrolly::-webkit-scrollbar-thumb {
+  background: #334155;
+}

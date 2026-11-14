@@ -1,0 +1,14 @@
+# secrets and local data
+backend/.env
+backend/commissions.json
+*.local
+frontend/.env.local
+
+# local branding (names, logos, favicon) — see frontend/.env.example
+frontend/public/brand/
+
+# build output and dependencies
+node_modules/
+frontend/dist/
+*.tsbuildinfo
+*.log

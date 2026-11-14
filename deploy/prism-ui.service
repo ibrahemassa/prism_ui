@@ -1,0 +1,32 @@
+# systemd unit for the Prism UI + CRM sync on the office LAN box.
+#
+#   cd frontend && npm ci && npm run build
+#   cd ../backend && go build -o /opt/prism_ui/prism_ui .
+#   cp -r ../frontend/dist /opt/prism_ui/dist
+#   cp .env /opt/prism_ui/.env            # PRISM_* + CRM_INGEST_* vars
+#   sudo cp ../deploy/prism-ui.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now prism-ui
+#
+# Everyone on the LAN then opens http://<this-box>:8080.
+
+[Unit]
+Description=Prism UI (read-only Prism API + CRM sync)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/prism_ui
+EnvironmentFile=/opt/prism_ui/.env
+Environment=PRISM_UI_STATIC=/opt/prism_ui/dist
+ExecStart=/opt/prism_ui/prism_ui
+Restart=always
+RestartSec=5
+# It only ever reads Prism; the one thing it writes is its own log.
+ProtectSystem=strict
+ReadWritePaths=/opt/prism_ui
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

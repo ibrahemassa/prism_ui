@@ -1,0 +1,521 @@
+/* Printable report — the CRM's plan/report stationery (forest, deep, gold on
+   paper, Instrument Sans). Self-contained so the app's dark-mode overrides
+   never leak into the PDF. A4, 16/15/18 mm margins like the CRM's report. */
+@page {
+  size: A4 portrait;
+  margin: 16mm 15mm 18mm;
+  /* running footer in the page margin boxes — Chromium ≥131. Its text
+     (project · company) is set in ReportPrint.tsx, from the local branding. */
+  @bottom-left {
+    font-family: "Instrument Sans", system-ui, sans-serif;
+    font-size: 7.5pt;
+    color: #66756c;
+    letter-spacing: 0.04em;
+  }
+  @bottom-right {
+    content: "Sayfa " counter(page) " / " counter(pages);
+    font-family: "Instrument Sans", system-ui, sans-serif;
+    font-size: 7.5pt;
+    color: #66756c;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.rp-root {
+  --forest: #0e5a33;
+  --deep: #093b22;
+  --gold: #c7a233;
+  --gold-tint: #faf4e3;
+  --ink: #14211b;
+  --mute: #66756c;
+  --line: #d7dfd9;
+  --band: #f2f5f3;
+  --brick: #a23b2b;
+  --gold-ink: #8f6f14; /* gold for text — the tint itself is too pale on paper */
+
+  color-scheme: light;
+  background: #e6ebe7;
+  min-height: 100vh;
+  padding: 24px 0 48px;
+  font-family: "Instrument Sans", "Manrope", system-ui, -apple-system, sans-serif;
+  color: var(--ink);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.rp-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  background: rgba(230, 235, 231, 0.92);
+  backdrop-filter: blur(6px);
+  margin: -24px 0 20px;
+}
+.rp-btn {
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--deep);
+  cursor: pointer;
+}
+.rp-btn.primary {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: #fff;
+}
+.rp-sheet {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  background: #fff;
+  padding: 16mm 15mm 18mm;
+  box-shadow: 0 10px 40px rgba(9, 59, 34, 0.18);
+  font-size: 10.5pt;
+  line-height: 1.5;
+}
+
+/* header: kicker · title · logo, forest rule beneath — the CRM report's */
+.rp-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10mm;
+  padding-bottom: 4mm;
+  border-bottom: 0.9mm solid var(--forest);
+}
+.rp-kicker {
+  font-size: 0.72em;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  color: var(--gold);
+  margin-bottom: 1.5mm;
+}
+.rp-head h1 {
+  margin: 0;
+  font-size: 1.9em;
+  line-height: 1.15;
+  font-weight: 800;
+  color: var(--deep);
+  letter-spacing: -0.01em;
+}
+.rp-head p {
+  margin: 1.5mm 0 0;
+  color: var(--mute);
+  font-size: 1em;
+  line-height: 1.4;
+}
+.rp-logo {
+  height: 16mm;
+  flex-shrink: 0;
+}
+
+/* provenance strip */
+.rp-prov {
+  display: flex;
+  gap: 8mm;
+  padding: 2.5mm 3mm;
+  background: var(--gold-tint);
+  border-left: 0.8mm solid var(--gold);
+  margin: 2mm 0 6mm;
+  font-size: 0.86em;
+}
+.rp-prov span {
+  letter-spacing: 0.12em;
+  color: var(--mute);
+  font-weight: 700;
+}
+.rp-prov div > div {
+  font-weight: 700;
+  color: var(--deep);
+  margin-top: 0.5mm;
+}
+
+/* KPI tiles */
+.rp-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3mm;
+  margin: 0 0 2mm;
+}
+.rp-kpi {
+  border: 0.2mm solid var(--line);
+  border-top: 0.8mm solid var(--forest);
+  padding: 2.5mm 3mm;
+  break-inside: avoid;
+}
+.rp-kpi.gold {
+  border-top-color: var(--gold);
+}
+.rp-kpi.brick {
+  border-top-color: var(--brick);
+}
+.rp-kpi .l {
+  color: var(--mute);
+  font-size: 0.72em;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+.rp-kpi .v {
+  font-size: 1.45em;
+  font-weight: 800;
+  margin-top: 1mm;
+  color: var(--deep);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+.rp-kpi .s {
+  color: var(--mute);
+  font-size: 0.8em;
+  margin-top: 0.5mm;
+}
+
+/* sections */
+.rp-section {
+  margin-top: 6mm;
+  break-inside: avoid;
+}
+.rp-section h2 {
+  font-size: 1.05em;
+  font-weight: 800;
+  margin: 0 0 0.5mm;
+  color: var(--deep);
+  letter-spacing: -0.01em;
+}
+.rp-section .note {
+  color: var(--mute);
+  font-size: 0.82em;
+  margin-bottom: 2mm;
+}
+.rp-grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8mm;
+}
+
+/* tables */
+.rp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+}
+.rp-table th {
+  text-align: left;
+  font-size: 0.78em;
+  color: var(--mute);
+  font-weight: 700;
+  padding: 1.6mm 2mm;
+  border-bottom: 0.4mm solid var(--forest);
+  letter-spacing: 0.12em;
+}
+.rp-table td {
+  padding: 1.6mm 2mm;
+  white-space: nowrap;
+  border-bottom: 0.2mm solid var(--line);
+  font-variant-numeric: tabular-nums;
+  vertical-align: middle;
+}
+.rp-table tr:last-child td {
+  border-bottom: 0;
+}
+.rp-table .r {
+  text-align: right;
+}
+.rp-table .b {
+  font-weight: 700;
+  color: var(--deep);
+}
+.rp-table tfoot td {
+  border-top: 0.4mm solid var(--forest);
+  font-weight: 700;
+  color: var(--deep);
+  background: var(--band);
+}
+.rp-muted {
+  color: var(--mute);
+}
+.rp-pos {
+  color: var(--forest);
+}
+.rp-neg {
+  color: var(--brick);
+}
+.rp-gold {
+  color: var(--gold-ink);
+}
+.rp-deep {
+  color: var(--deep);
+}
+.rp-big {
+  font-weight: 800;
+  font-size: 2.2em;
+  letter-spacing: -0.02em;
+  color: var(--deep);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+/* bars */
+.rp-bar {
+  height: 2mm;
+  background: var(--band);
+  overflow: hidden;
+  min-width: 25mm;
+}
+.rp-bar > i {
+  display: block;
+  height: 100%;
+}
+.rp-progress {
+  height: 3mm;
+  background: var(--band);
+  overflow: hidden;
+  margin-top: 2.5mm;
+}
+.rp-progress > i {
+  display: block;
+  height: 100%;
+  background: var(--forest);
+}
+.rp-legend {
+  display: flex;
+  justify-content: space-between;
+  color: var(--mute);
+  font-size: 0.8em;
+  margin-top: 1mm;
+}
+
+/* footer band — forest, the company mark in white, repeated per page */
+.rp-foot {
+  margin-top: 8mm;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6mm;
+  padding: 2.5mm 4mm;
+  background: var(--forest);
+  color: #e6efe9;
+  font-size: 0.78em;
+  letter-spacing: 0.06em;
+}
+.rp-foot span {
+  white-space: nowrap;
+}
+.rp-foot img {
+  height: 6mm;
+  opacity: 0.95;
+}
+.rp-foot .stamp {
+  color: #b9cfc2;
+}
+
+@media print {
+  html,
+  body,
+  #root {
+    background: #fff !important;
+    height: auto !important;
+  }
+  .rp-root {
+    background: #fff;
+    padding: 0;
+    min-height: 0;
+  }
+  .rp-toolbar {
+    display: none;
+  }
+  .rp-sheet {
+    width: auto;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+  .rp-foot {
+    display: none; /* the @page margin boxes carry the running footer */
+  }
+  .rp-section,
+  .rp-kpi,
+  tr {
+    break-inside: avoid;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+/* ---------- long-form report: pages, cover, contents, callouts ---------- */
+.rp-page {
+  break-before: page;
+  page-break-before: always;
+  padding-top: 2mm;
+}
+.rp-page-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 0.6mm solid var(--forest);
+  padding-bottom: 1.5mm;
+  margin-bottom: 4mm;
+}
+.rp-page-head h2 {
+  margin: 0;
+  font-size: 1.45em;
+  font-weight: 800;
+  color: var(--deep);
+  letter-spacing: -0.01em;
+}
+.rp-page-head .num {
+  font-size: 0.75em;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+}
+.rp-page-head .sub {
+  color: var(--mute);
+  font-size: 0.82em;
+}
+.rp-cover {
+  min-height: 250mm;
+  display: flex;
+  flex-direction: column;
+}
+.rp-cover .band {
+  background: var(--forest);
+  color: #fff;
+  padding: 10mm 8mm;
+  margin: 4mm 0 6mm;
+  position: relative;
+}
+.rp-cover .band img {
+  position: absolute;
+  right: 8mm;
+  bottom: 8mm;
+  height: 9mm;
+  opacity: 0.9;
+}
+.rp-cover .band .k {
+  font-size: 0.72em;
+  letter-spacing: 0.24em;
+  color: var(--gold);
+  font-weight: 800;
+}
+.rp-cover .band h1 {
+  margin: 2mm 0 1mm;
+  font-size: 2.6em;
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.rp-cover .band p {
+  margin: 0;
+  color: #cfe0d5;
+  font-size: 1em;
+}
+.rp-cover .meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3mm;
+  font-size: 0.86em;
+}
+.rp-cover .meta span {
+  display: block;
+  letter-spacing: 0.12em;
+  color: var(--mute);
+  font-weight: 700;
+  font-size: 0.82em;
+}
+.rp-cover .meta b {
+  color: var(--deep);
+}
+.rp-toc {
+  margin-top: 8mm;
+  columns: 2;
+  column-gap: 8mm;
+  font-size: 0.92em;
+}
+.rp-toc div {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 0.2mm dotted var(--line);
+  padding: 1.2mm 0;
+  break-inside: avoid;
+}
+.rp-toc div span:last-child {
+  color: var(--mute);
+  font-variant-numeric: tabular-nums;
+}
+.rp-callout {
+  background: var(--gold-tint);
+  border-left: 0.8mm solid var(--gold);
+  padding: 2.5mm 3.5mm;
+  margin: 3mm 0;
+  font-size: 0.92em;
+}
+.rp-callout ul {
+  margin: 0;
+  padding-left: 4mm;
+}
+.rp-callout li {
+  margin: 0.6mm 0;
+}
+.rp-callout b {
+  color: var(--deep);
+}
+.rp-kpis.six {
+  grid-template-columns: repeat(3, 1fr);
+}
+.rp-kpis.four {
+  grid-template-columns: repeat(4, 1fr);
+}
+.rp-chart {
+  margin: 2mm 0 1mm;
+}
+.rp-chart-title {
+  font-size: 0.9em;
+  font-weight: 700;
+  color: var(--deep);
+  margin: 3mm 0 1mm;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4mm;
+}
+.rp-table.compact th,
+.rp-table.compact td {
+  padding: 1.1mm 1.6mm;
+  font-size: 0.86em;
+}
+.rp-table.wrap td {
+  white-space: normal;
+}
+.rp-def dt {
+  font-weight: 700;
+  color: var(--deep);
+  margin-top: 1.5mm;
+}
+.rp-def dd {
+  margin: 0 0 0 0;
+  color: var(--mute);
+  font-size: 0.9em;
+}
+.rp-grid3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6mm;
+}
+.rp-small {
+  font-size: 0.82em;
+  color: var(--mute);
+}
+@media print {
+  .rp-cover {
+    min-height: auto;
+  }
+}
