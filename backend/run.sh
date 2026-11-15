@@ -14,7 +14,14 @@ export GOPATH="${GOPATH:-$HOME/go}"
 # Settings (DB, CRM, commissions) come from .env — see .env.example.
 # Optional live CRM enrichment: set PRISM_CRM_DSN (read-only Postgres DSN);
 # left unset, CRM enrichment simply stays off.
-[ -f .env ] && set -a && . ./.env && set +a
+# Quote values with spaces in .env: PRISM_CONFIG_DIR="/path/with spaces".
+# A line that doesn't parse stops the script here (set -e) instead of
+# silently leaving its variable unset.
+if [ -f .env ]; then
+  set -a
+  . ./.env
+  set +a
+fi
 export PRISM_UI_ADDR="${PRISM_UI_ADDR:-:8080}"
 
 echo "Prism config dir: ${PRISM_CONFIG_DIR:-(unset; using PRISM_DSN / PRISM_DB_*)}"
